@@ -44,7 +44,7 @@ yarn-error.log*
 # Large Data & Machine Learning
 processed_dataset/
 faiss_indexes/
-embeddings/
+/embeddings/
 *.parquet
 # Only ignore CSVs and JSONs in root data folders if desired, 
 # but ignoring package.json is bad, so we don't blanket ignore *.json
