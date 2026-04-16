@@ -1,0 +1,214 @@
+[
+  {
+    "id": 1,
+    "label": "Order Status (ID inline)",
+    "query": "What is the current status of my order e481f51cbdc54678b7cc49136f2d6af7?",
+    "order_id_provided": "",
+    "intent": "order_status",
+    "path": "agent",
+    "tools_called": [
+      "order_lookup"
+    ],
+    "answer": "Your order e481f51cbdc54678b7cc49136f2d6af7 has been delivered on time. It was purchased on October 2nd, 2017, and the estimated delivery date was October 18th, 2017. However, it was actually delivered on October 10th, 2017. The payment method used was a credit card for R$18.12, and the category of the item is housewares.",
+    "latency_s": 1.911,
+    "docs_used": 0,
+    "error": null
+  },
+  {
+    "id": 2,
+    "label": "Delivery Delay (ID in box)",
+    "query": "My package is very late. Can you tell me what happened?",
+    "order_id_provided": "203096f03d82e0dffbc41ebc2e2bcfb7",
+    "intent": "order_status",
+    "path": "agent",
+    "tools_called": [
+      "order_lookup"
+    ],
+    "answer": "Your order 203096f03d82e0dffbc41ebc2e2bcfb7 was delivered 11 days late. The estimated delivery date was September 28th, 2017, but it was actually delivered on October 9th, 2017.",
+    "latency_s": 30.94,
+    "docs_used": 0,
+    "error": null
+  },
+  {
+    "id": 3,
+    "label": "Refund Eligibility (ID inline)",
+    "query": "Is order 83422b2b70c1aa20c57b21f09a52cf3c eligible for a refund? It arrived very late.",
+    "order_id_provided": "",
+    "intent": "refund_request",
+    "path": "agent",
+    "tools_called": [
+      "order_lookup",
+      "rag_search"
+    ],
+    "answer": "Unfortunately, we couldn't find any information about your order 83422b2b70c1aa20c57b21f09a52cf3c in our system. However, based on our general refund policy, if your order was delivered late, you may be eligible for a refund. Please contact our support team so we can look into this further and assist you with your issue.",
+    "latency_s": 13.701,
+    "docs_used": 0,
+    "error": null
+  },
+  {
+    "id": 4,
+    "label": "Payment Details (ID in box)",
+    "query": "How was the payment made for my order and what was the total amount?",
+    "order_id_provided": "e481f51cbdc54678b7cc49136f2d6af7",
+    "intent": "policy_query",
+    "path": "agent",
+    "tools_called": [
+      "order_lookup"
+    ],
+    "answer": "The payment for your order e481f51cbdc54678b7cc49136f2d6af7 was made using a credit card for a total amount of R$18.12.",
+    "latency_s": 34.509,
+    "docs_used": 0,
+    "error": null
+  },
+  {
+    "id": 5,
+    "label": "Delivery Date Check (ID inline)",
+    "query": "When was order e481f51cbdc54678b7cc49136f2d6af7 actually delivered versus the estimate?",
+    "order_id_provided": "",
+    "intent": "policy_query",
+    "path": "agent",
+    "tools_called": [
+      "order_lookup"
+    ],
+    "answer": "Your order e481f51cbdc54678b7cc49136f2d6af7 was actually delivered on time, on 2017-10-10 21:25:13, which is before the estimated delivery date of 2017-10-18 00:00:00.",
+    "latency_s": 31.85,
+    "docs_used": 0,
+    "error": null
+  },
+  {
+    "id": 6,
+    "label": "Seller Reliability (ID in box)",
+    "query": "Please analyse this seller and tell me if they are trustworthy and what their performance looks like.",
+    "order_id_provided": "1f50f920176fa81dab994f9023523100",
+    "intent": "seller_issue",
+    "path": "agent",
+    "tools_called": [
+      "seller_analysis"
+    ],
+    "answer": "This seller has an average rating of 4.0 out of 5, which suggests they are generally well-regarded by customers. However, their late delivery rate is 8.2%, which is slightly higher than average, and their complaint rate is 18.2%, which is also higher than average. This may indicate some issues with their shipping or customer service. Despite this, they have a large number of total orders (2017) and have not been flagged as a potentially untrustworthy seller.",
+    "latency_s": 4.636,
+    "docs_used": 0,
+    "error": null
+  },
+  {
+    "id": 7,
+    "label": "Seller Complaint Rate (ID in box)",
+    "query": "What is the complaint rate and late delivery rate for this seller?",
+    "order_id_provided": "0015a82c2db000af6aaaf3ae2ecb0532",
+    "intent": "policy_query",
+    "path": "agent",
+    "tools_called": [
+      "seller_analysis"
+    ],
+    "answer": "Note: The seller has a high complaint rate and no late deliveries, but a low average rating.",
+    "latency_s": 39.219,
+    "docs_used": 0,
+    "error": null
+  },
+  {
+    "id": 8,
+    "label": "Seller Performance Flag (ID inline)",
+    "query": "Is seller 1f50f920176fa81dab994f9023523100 flagged for poor performance?",
+    "order_id_provided": "",
+    "intent": "policy_query",
+    "path": "agent",
+    "tools_called": [
+      "seller_analysis"
+    ],
+    "answer": "The seller 1f50f920176fa81dab994f9023523100 has an average rating of 4.0 out of 5, a late delivery rate of 8.2%, and a complaint rate of 18.2%. They have completed a total of 2017 orders and are not currently flagged for poor performance.",
+    "latency_s": 38.089,
+    "docs_used": 0,
+    "error": null
+  },
+  {
+    "id": 9,
+    "label": "Return Policy",
+    "query": "How long do I have to return a product and what is the process?",
+    "order_id_provided": "",
+    "intent": "policy_query",
+    "path": "rag_chain",
+    "tools_called": [],
+    "answer": "Hello, I'd be happy to help you with your question about returning a product. \n\nAccording to our platform policy (Source 1), you have the right to return any product within 7 (seven) calendar days of receiving the item, in accordance with Article 49 of the Brazilian Consumer Defense Code (Codigo de Defesa do Consumidor - CDC) (Source 5). This right applies to purchases made online without the need to provide a reason.\n\nIf the product is defective or damaged, the return window is extended to 30 days for non-durable goods and 90 days for durable goods (electronics, appliances, furniture), per CDC Article 26 (Source 1).\n\nTo initiate the return process, please contact our customer support team. We will guide you through the steps and ensure that you receive a full refund if the product is returned within the applicable return window and meets the eligibility conditions (Source 2).",
+    "latency_s": 17.991,
+    "docs_used": 5,
+    "error": null
+  },
+  {
+    "id": 10,
+    "label": "Refund Timeline",
+    "query": "How long does a refund typically take after I submit a request?",
+    "order_id_provided": "",
+    "intent": "policy_query",
+    "path": "rag_chain",
+    "tools_called": [],
+    "answer": "Hello, I'd be happy to help you with your question about refund processing time. \n\nAccording to our platform policy (Source 1), the refund processing timeline varies depending on the payment method used. For credit card payments, it takes 5-10 business days (up to 2 billing cycles) to process the refund. For Boleto bancario, it takes 3-5 business days to the registered bank account. For debit payments, it takes 3-7 business days, and for gift vouchers, it takes 1-2 business days (reissued as store credit).",
+    "latency_s": 20.519,
+    "docs_used": 5,
+    "error": null
+  },
+  {
+    "id": 11,
+    "label": "Consumer Rights",
+    "query": "What are my consumer rights if a seller refuses to accept my return?",
+    "order_id_provided": "",
+    "intent": "policy_query",
+    "path": "rag_chain",
+    "tools_called": [],
+    "answer": "Hello, I'd be happy to help you with your question about consumer rights if a seller refuses to accept your return.\n\nAccording to our platform policy (Source 1), you have the right to return any product within 7 (seven) calendar days of receiving the item, in accordance with Article 49 of the Brazilian Consumer Defense Code (Codigo de Defesa do Consumidor - CDC). This right applies to purchases made online without the need to provide a reason.\n\nIf a seller refuses to accept your return, you may be eligible for a full refund under certain conditions (Source 5). A full refund is issued when:\n- Product is returned within the 7-day window in original condition\n- Product arrived defective or damaged\n- Product does not match the description or photos\n- Order was canceled before shipment\n\nPlease note that partial refunds may apply if products show signs of use beyond inspection (Source 5).",
+    "latency_s": 24.152,
+    "docs_used": 5,
+    "error": null
+  },
+  {
+    "id": 12,
+    "label": "Damaged Product",
+    "query": "I received a damaged product. The screen is cracked. What should I do?",
+    "order_id_provided": "",
+    "intent": "product_issue",
+    "path": "rag_chain",
+    "tools_called": [],
+    "answer": "Hello, I'm here to help you with your damaged product issue. \n\nBased on our platform policy (Source 1), you have the right to return any product within 7 (seven) calendar days of receiving the item, in accordance with Article 49 of the Brazilian Consumer Defense Code. \n\nIf your product is damaged, you can choose to either request a replacement or a refund. To initiate the return process, please contact our customer support team with your Order ID so we can assist you further.",
+    "latency_s": 3.427,
+    "docs_used": 5,
+    "error": null
+  },
+  {
+    "id": 13,
+    "label": "Wrong Item Delivered",
+    "query": "The item delivered to me is completely different from what I ordered. How do I resolve this?",
+    "order_id_provided": "",
+    "intent": "product_issue",
+    "path": "rag_chain",
+    "tools_called": [],
+    "answer": "Hello, I'm here to help you with your product issue. \n\nBased on our platform policy (Source 1), you have the right to return any product within 7 (seven) calendar days of receiving the item, in accordance with Article 49 of the Brazilian Consumer Defense Code. \n\nIf your product is not as described, you have two resolution options: replacement or refund. To proceed, please provide your Order ID so I can assist you further.",
+    "latency_s": 24.972,
+    "docs_used": 5,
+    "error": null
+  },
+  {
+    "id": 14,
+    "label": "Payment Methods",
+    "query": "What payment methods are accepted on the platform?",
+    "order_id_provided": "",
+    "intent": "policy_query",
+    "path": "rag_chain",
+    "tools_called": [],
+    "answer": "Hello, I'd be happy to help you with your question about payment methods on our platform.\n\nAccording to our platform policy, we accept various payment methods, including cash and installments (Source 1). However, I couldn't find any specific information on the accepted payment methods, their timeframes, or eligibility conditions in the provided sources. \n\nTo provide a more precise answer, I would need additional information, such as the specific payment method you're interested in or any relevant order details.",
+    "latency_s": 3.58,
+    "docs_used": 5,
+    "error": null
+  },
+  {
+    "id": 15,
+    "label": "No ID \u2014 Clarification Expected",
+    "query": "Where is my order? I need to know right now.",
+    "order_id_provided": "",
+    "intent": "order_status",
+    "path": "rag_chain",
+    "tools_called": [],
+    "answer": "Hello, I'd be happy to help you with your question about your order status. \n\nBased on our platform policy (Source 1), we strive to deliver orders on time. However, I couldn't find any specific information on your order status without the Order ID. Could you please provide the Order ID so I can assist you further?",
+    "latency_s": 17.648,
+    "docs_used": 5,
+    "error": null
+  }
+]
