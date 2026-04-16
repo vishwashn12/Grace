@@ -18,13 +18,43 @@ function getOrCreateSessionId() {
   return id
 }
 
-export default function Chat() {
+/**
+ * Build a structured log entry from the backend response.
+ * Keeps a consistent data-contract for InsightsPage consumption.
+ */
+function buildLogEntry(query, response) {
+  const totalSec = Number(response.latency || 0)
+  const totalMs = response.latency_ms ?? Math.round(totalSec * 1000)
+  const toolCalls = response.reasoning?.tool_calls ?? []
+
+  return {
+    timestamp: new Date().toISOString(),
+    query,
+    intent: response.intent || 'unknown',
+    mode: response.mode || 'unknown',
+    latency_total_ms: totalMs,
+    // The backend doesn't split retrieval/LLM latency — estimate:
+    // agent mode has no retrieval, RAG modes split roughly 30/70
+    latency_retrieval_ms:
+      (response.mode || '').includes('agent')
+        ? 0
+        : Math.round(totalMs * 0.3),
+    latency_llm_ms:
+      (response.mode || '').includes('agent')
+        ? totalMs
+        : Math.round(totalMs * 0.7),
+    docs_retrieved: response.documents_retrieved ?? 0,
+    tools_used: toolCalls.length ? toolCalls : 'None',
+  }
+}
+
+export default function Chat({ onLogQuery, onClearQueryLog }) {
   const { isDark } = useTheme()
   const [query, setQuery] = useState('')
   const [orderId, setOrderId] = useState('')
   const [messages, setMessages] = useState(() => {
     try {
-      const cached = localStorage.getItem(STORAGE_KEY)
+      const cached = sessionStorage.getItem(STORAGE_KEY)
       return cached ? JSON.parse(cached) : []
     } catch {
       return []
@@ -35,7 +65,7 @@ export default function Chat() {
   const inputRef = useRef(null)
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages))
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages))
     if (scrollRef.current) {
       scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
     }
@@ -45,11 +75,13 @@ export default function Chat() {
 
   const clearChat = () => {
     setMessages([])
-    localStorage.removeItem(STORAGE_KEY)
+    sessionStorage.removeItem(STORAGE_KEY)
     // Reset backend session so memory starts fresh
     sessionStorage.removeItem(SESSION_KEY)
     // Reset pipeline settings to defaults for the new chat
     sessionStorage.removeItem('supportops_settings')
+    // Clear query log in parent (App-level state + sessionStorage)
+    onClearQueryLog?.()
   }
 
   const submitQuery = async (event) => {
@@ -75,6 +107,8 @@ export default function Chat() {
         role: 'assistant',
         response,
       }])
+      // Log successful response metrics
+      onLogQuery?.(buildLogEntry(trimmed, response))
     } catch (error) {
       const fallback = {
         answer: error?.response?.data?.detail || 'The assistant is temporarily unavailable. Please try again.',
@@ -91,6 +125,8 @@ export default function Chat() {
         },
       }
       setMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'assistant', response: fallback }])
+      // Log fallback response too
+      onLogQuery?.(buildLogEntry(trimmed, fallback))
     } finally {
       setLoading(false)
       inputRef.current?.focus()
