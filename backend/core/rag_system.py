@@ -39,6 +39,9 @@ INJECTION_PATTERNS = re.compile(
     re.IGNORECASE,
 )
 
+# Matches any 32-character hexadecimal identifier embedded in query text
+_ENTITY_ID_RE = re.compile(r'\b([0-9a-f]{32})\b', re.IGNORECASE)
+
 
 class OlistRAGSystem:
     """
@@ -350,6 +353,14 @@ class OlistRAGSystem:
 
             # Classify intent ONCE with LLM — reused for both routing and generation
             intent = classify_intent_llm(safe_query, self.llm)
+
+            # If no ID was supplied via the dedicated box, try to extract
+            # one embedded directly in the query text (e.g. "details for
+            # seller 0015a82c2db000af6aaaf3ae2ecb0532").
+            if not order_id:
+                match = _ENTITY_ID_RE.search(safe_query)
+                if match:
+                    order_id = match.group(1)
 
             if self._should_use_agent(safe_query, order_id, intent):
                 return self._agent_answer(safe_query, session_id, order_id)
