@@ -144,6 +144,21 @@ GenAI/
 
 ---
 
+## Dataset
+
+The datasets used in this project are publicly available via Google Drive:
+
+📁 **[GRACE Project Datasets](https://drive.google.com/drive/folders/1GvK1lzJsfDIkIVxBJLSzuls-f14gT7UH?usp=drive_link)**
+
+This includes:
+- Raw and processed Olist e-commerce data
+- Pre-built FAISS indexes (`main_index`, `complaints_index`, `policy_index`)
+- Processed Parquet files (`order_lookup.parquet`, `seller_kpi.parquet`)
+
+> **Note:** Download and place the contents into the `faiss_indexes/` and `processed_dataset/` directories respectively before running the system.
+
+---
+
 ## Prerequisites
 
 | Requirement | Version |
